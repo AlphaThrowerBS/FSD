@@ -1,35 +1,48 @@
-const display = 3000; // 3 seconds
+function register()
 
-function register() {
-    setTimeout(waitForInput, display);
-    console.log("Registering...");
+{
+setTimeout(()=>{
+    console.log("register here");
+}, 1000);
+}
+function login( ){
+setTimeout(()=>{
+    console.log("login here");
+}, 1000);
+}
+function getData(){
+waitforinput(9000);
+console.log("data fetched");
+}
+function logout(){
+
+waitforinput(5000);
+console.log("you are logged out");
+}
+function waitforinput(delay){
+        const ct=Date.now();
+const ms=ct+delay;
+while(Date.now()<ms){
+    // busy-wai
 }
 
-function login() {
-    console.log("Logging in...");
+    console.log("waited for ",delay,"ms");
+
+
 }
 
-function getData() {
-    console.log("Getting data...");
+function displaydata(){
+console.log("displaying data");
 }
-
-function displayData() {
-    console.log("Displaying data...");
-}
-
-function waitForInput() {
-    const ct = Date.now();
-    const ms = ct + display;
-
-    while (Date.now() < ms) {
-        // Waiting (not recommended)
-    }
-
-    console.log("Waiting finished.");
-}
-
+register(()=>{
+login(()=>{
+    getData(()=>{
+        displaydata();
+    });
+});
+});
 register();
 login();
 getData();
-displayData();
-console.log("Call another app...");
+logout();
+waitforinput();
