@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const URL = "https://dummyjson.com/products?limit=100&skip=0";
+
+        document.body.style.background = "yellow";
+
+        fetch(URL)
+            .then(response => response.json())
+            .then(data => {
+                const products = data.products;
+                const table = document.querySelector("table");
+
+                products.forEach(product => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${product.price}</td>
+                        <td>${product.category}</td>
+                        <td>${product.description}</td>
+                    `;
+                    table.appendChild(row);
+                });
+            });
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+        </tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </table>
+    
+
+  
+</body>
+</html>
