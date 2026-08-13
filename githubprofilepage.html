@@ -7,87 +7,407 @@
     <title>GitHub User Details</title>
 
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background: #f4f6f8;
-        color: #333;
+      :root {
+        --bg: #0d1117;
+        --bg-elevated: #161b22;
+        --panel: rgba(22, 27, 34, 0.8);
+        --panel-border: rgba(148, 163, 184, 0.18);
+        --primary: #58a6ff;
+        --primary-strong: #1f6feb;
+        --text: #e6edf3;
+        --muted: #8b949e;
+        --success: #3fb950;
+        --warning: #d29922;
+        --shadow: rgba(1, 4, 9, 0.6);
       }
 
-      h1 {
-        text-align: center;
-        color: #598cc0;
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top, rgba(88, 166, 255, 0.18), transparent 30%),
+          linear-gradient(135deg, #0d1117, #111827 42%, #0f172a);
+        color: var(--text);
+      }
+
+      .page-shell {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 24px;
+        margin-bottom: 28px;
+        border: 1px solid var(--panel-border);
+        border-radius: 18px;
+        background: rgba(13, 17, 23, 0.72);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 18px 40px var(--shadow);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #58a6ff, #1f6feb);
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .page-title {
+        font-size: clamp(1.2rem, 2vw, 1.8rem);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .search-panel {
+        max-width: 760px;
+        margin: 0 auto 28px;
+        padding: 18px;
+        border: 1px solid var(--panel-border);
+        border-radius: 18px;
+        background: rgba(13, 17, 23, 0.72);
+        box-shadow: 0 18px 40px var(--shadow);
+      }
+
+      .search-form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 14px 16px;
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+        font-size: 1rem;
+        outline: none;
+      }
+
+      .search-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+      }
+
+      .search-btn {
+        border: none;
+        cursor: pointer;
+      }
+
+      #user {
+        display: flex;
+        justify-content: center;
       }
 
       .user-card {
-        border: 1px solid #ddd;
-        padding: 20px;
-        width: 350px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin: 30px auto;
-        background: #fff;
-        text-align: center;
+        width: min(100%, 760px);
+        background: linear-gradient(180deg, rgba(22, 27, 34, 0.96), rgba(13, 17, 23, 0.98));
+        border: 1px solid var(--panel-border);
+        border-radius: 28px;
+        box-shadow: 0 25px 50px rgba(1, 4, 9, 0.45);
+        overflow: hidden;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
       .user-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px);
+        box-shadow: 0 30px 60px rgba(1, 4, 9, 0.55);
       }
 
-      .user-card img {
-        width: 120px;
+      .profile-banner {
+        height: 120px;
+        background: linear-gradient(135deg, rgba(88, 166, 255, 0.28), rgba(31, 111, 235, 0.2));
+        border-bottom: 1px solid var(--panel-border);
+      }
+
+      .profile-content {
+        padding: 0 28px 28px;
+      }
+
+      .profile-header {
+        display: flex;
+        align-items: flex-end;
+        gap: 22px;
+        margin-top: -52px;
+      }
+
+      .avatar-wrap {
+        position: relative;
+      }
+
+      .profile-avatar {
+        width: 140px;
+        height: 140px;
         border-radius: 50%;
-        border: 3px solid #2ba6f7;
-        margin-bottom: 15px;
+        border: 5px solid rgba(13, 17, 23, 0.95);
+        object-fit: cover;
+        background: #fff;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
       }
 
-      .user-card h2 {
-        margin: 10px 0;
-        color: #3498db;
+      .status-dot {
+        position: absolute;
+        right: 8px;
+        bottom: 12px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--success);
+        border: 4px solid rgba(13, 17, 23, 0.95);
       }
 
-      .user-card p {
-        margin: 6px 0;
-        font-size: 14px;
+      .profile-name-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
       }
 
-      .user-card a {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 8px 14px;
-        background: #3498db;
-        color: #fff;
+      .profile-name {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+
+      .profile-handle {
+        color: var(--muted);
+        font-size: 1.15rem;
+        font-weight: 500;
+      }
+
+      .profile-bio {
+        margin: 16px 0 24px;
+        max-width: 640px;
+        color: #c9d1d9;
+        line-height: 1.6;
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border: 1px solid var(--panel-border);
+        border-radius: 14px;
+        background: rgba(13, 17, 23, 0.5);
+        color: var(--text);
+      }
+
+      .meta-item .label {
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .meta-item .value {
+        display: block;
+        margin-top: 4px;
+        font-weight: 600;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 14px;
+        margin: 24px 0;
+      }
+
+      .stat-card {
+        padding: 18px 16px;
+        border: 1px solid var(--panel-border);
+        border-radius: 16px;
+        background: rgba(13, 17, 23, 0.55);
+        text-align: center;
+      }
+
+      .stat-value {
+        display: block;
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 12px;
         text-decoration: none;
-        border-radius: 6px;
-        transition: background 0.2s ease;
+        font-weight: 600;
+        transition: transform 0.2s ease, filter 0.2s ease;
       }
 
-      .user-card a:hover {
-        background: #1d6fa5;
+      .btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.08);
       }
 
-      #user {
-        margin-top: 20px;
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+        color: #fff;
+      }
+
+      .btn-secondary {
+        border: 1px solid var(--panel-border);
+        background: rgba(22, 27, 34, 0.72);
+        color: var(--text);
+      }
+
+      .loading-card,
+      .error-card {
+        width: min(100%, 520px);
+        padding: 28px 24px;
+        border-radius: 20px;
+        border: 1px solid var(--panel-border);
+        background: rgba(22, 27, 34, 0.8);
+        box-shadow: 0 20px 40px rgba(1, 4, 9, 0.3);
+        text-align: center;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 14px;
+        border: 4px solid rgba(88, 166, 255, 0.2);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .error-card {
+        color: #ffb3b3;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .topbar {
+          padding: 14px 16px;
+        }
+
+        .profile-content {
+          padding: 0 18px 22px;
+        }
+
+        .profile-header {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .profile-name-row {
+          justify-content: center;
+        }
+
+        .profile-avatar {
+          width: 120px;
+          height: 120px;
+        }
       }
     </style>
   </head>
 
   <body>
-    <h1>GitHub User Details</h1>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand">GH</div>
+        <div class="page-title">Developer Profile</div>
+      </header>
 
-    <div id="user"></div>
+      <div class="search-panel">
+        <form id="searchForm" class="search-form">
+          <input
+            id="usernameInput"
+            class="search-input"
+            type="text"
+            placeholder="Search GitHub username"
+            value="AlphaThrowerBS"
+          />
+          <button class="btn btn-primary search-btn" type="submit">Search</button>
+        </form>
+      </div>
+
+      <main id="user" aria-live="polite"></main>
+    </div>
 
     <script>
+      const escapeHtml = (value) =>
+        String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+
       async function loaduserdetails(username) {
         const userDiv = document.getElementById("user");
+        const trimmedUsername = username.trim();
 
-        userDiv.innerHTML = "<p>Loading...</p>";
+        if (!trimmedUsername) {
+          userDiv.innerHTML = `
+            <div class="error-card">
+              <h2>Enter a username</h2>
+              <p>Please type a valid GitHub username.</p>
+            </div>
+          `;
+          return;
+        }
+
+        userDiv.innerHTML = `
+          <div class="loading-card">
+            <div class="spinner"></div>
+            <div>Loading profile...</div>
+          </div>
+        `;
 
         try {
-          const url = `https://api.github.com/users/${username}`;
-
+          const url = `https://api.github.com/users/${trimmedUsername}`;
           const res = await fetch(url);
 
           if (!res.ok) {
@@ -96,45 +416,120 @@
 
           const data = await res.json();
 
+          const name = escapeHtml(data.name || data.login);
+          const login = escapeHtml(data.login);
+          const bio = escapeHtml(data.bio || "No bio available yet.");
+          const company = escapeHtml(data.company || "Not specified");
+          const location = escapeHtml(data.location || "Not specified");
+          const blog = data.blog ? escapeHtml(data.blog) : "Not specified";
+          const blogUrl = data.blog
+            ? data.blog.startsWith("http")
+              ? data.blog
+              : `https://${data.blog}`
+            : "#";
+          const twitter = data.twitter_username
+            ? `@${escapeHtml(data.twitter_username)}`
+            : "Not specified";
+
+          const blogMarkup = data.blog
+            ? `<a href="${blogUrl}" target="_blank" rel="noreferrer">${blog}</a>`
+            : "<span>Not specified</span>";
+
           userDiv.innerHTML = `
-            <div class="user-card">
-              <img src="${data.avatar_url}" alt="Avatar">
+            <article class="user-card">
+              <div class="profile-banner"></div>
 
-              <h2>${data.login}</h2>
+              <div class="profile-content">
+                <div class="profile-header">
+                  <div class="avatar-wrap">
+                    <img class="profile-avatar" src="${data.avatar_url}" alt="${login} avatar">
+                    <span class="status-dot" title="Available"></span>
+                  </div>
+                </div>
 
-              <p>
-                <strong>Name:</strong>
-                ${data.name || "N/A"}
-              </p>
+                <div class="profile-name-row">
+                  <h1 class="profile-name">${name}</h1>
+                  <span class="profile-handle">@${login}</span>
+                </div>
 
-              <p>
-                <strong>Bio:</strong>
-                ${data.bio || "No bio available"}
-              </p>
+                <p class="profile-bio">${bio}</p>
 
-              <p>
-                <strong>Public Repos:</strong>
-                ${data.public_repos}
-              </p>
+                <div class="meta-grid">
+                  <div class="meta-item">
+                    <div>
+                      <div class="label">Company</div>
+                      <span class="value">${company}</span>
+                    </div>
+                  </div>
 
-              <p>
-                <strong>Followers:</strong>
-                ${data.followers}
-              </p>
+                  <div class="meta-item">
+                    <div>
+                      <div class="label">Location</div>
+                      <span class="value">${location}</span>
+                    </div>
+                  </div>
 
-              <a href="${data.html_url}" target="_blank">
-                View Profile
-              </a>
-            </div>
+                  <div class="meta-item">
+                    <div>
+                      <div class="label">Website</div>
+                      <span class="value">${blogMarkup}</span>
+                    </div>
+                  </div>
+
+                  <div class="meta-item">
+                    <div>
+                      <div class="label">Twitter</div>
+                      <span class="value">${twitter}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <span class="stat-value">${data.public_repos}</span>
+                    <span class="stat-label">Repos</span>
+                  </div>
+
+                  <div class="stat-card">
+                    <span class="stat-value">${data.followers}</span>
+                    <span class="stat-label">Followers</span>
+                  </div>
+
+                  <div class="stat-card">
+                    <span class="stat-value">${data.following}</span>
+                    <span class="stat-label">Following</span>
+                  </div>
+
+                  <div class="stat-card">
+                    <span class="stat-value">${data.public_gists}</span>
+                    <span class="stat-label">Gists</span>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <a class="btn btn-primary" href="${data.html_url}" target="_blank" rel="noreferrer">View GitHub Profile</a>
+                  <a class="btn btn-secondary" href="https://github.com/${login}?tab=repositories" target="_blank" rel="noreferrer">Explore Repos</a>
+                </div>
+              </div>
+            </article>
           `;
         } catch (err) {
           userDiv.innerHTML = `
-            <p style="color:red;">
-              Error: ${err.message}
-            </p>
+            <div class="error-card">
+              <h2>Profile unavailable</h2>
+              <p>${escapeHtml(err.message)}</p>
+            </div>
           `;
         }
       }
+
+      const usernameInput = document.getElementById("usernameInput");
+      const searchForm = document.getElementById("searchForm");
+
+      searchForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        loaduserdetails(usernameInput.value);
+      });
 
       loaduserdetails("AlphaThrowerBS");
     </script>
