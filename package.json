@@ -1,0 +1,23 @@
+{
+  "name": "book-npm-app",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AlphaThrowerBS/FSD#readme",
+  "bugs": {
+    "url": "https://github.com/AlphaThrowerBS/FSD/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlphaThrowerBS/FSD.git"
+  },
+  "license": "ISC",
+  "author": "Yash Gupta",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "babel": "^5.8.38"
+  }
+}
